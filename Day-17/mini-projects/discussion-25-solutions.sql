@@ -25,13 +25,13 @@
         CREATE VIEW rep_orders AS SELECT salesRepEmployeeNumber, COUNT(DISTINCT orderNumber) AS no_of_orders FROM customers JOIN orders USING (customerNumber) GROUP BY salesRepEmployeeNumber;
 
     -- Finally, create a combined view that uses the above views to display the performance of each sales rep.
-        select salesRepEmployeeNumber, no_of_customers, total_payments, no_of_orders from rep_customers join rep_payments using(salesRepEmployeeNumber) join rep_orders using(salesRepEmployeeNumber);
+        create view rep_performance as select salesRepEmployeeNumber, no_of_customers, total_payments, no_of_orders from rep_customers join rep_payments using(salesRepEmployeeNumber) join rep_orders using(salesRepEmployeeNumber);
 
 
 -- 3. Scenario 3: HR and Sales Data Analysis- Assume the Classic Models has recently acquired a company and you now also have access to the hr database. The management wants to know if there's a relationship between employee's department, age, and their sales performance.
     -- Create a view in the hr database that shows the department and age of each employee.
         CREATE VIEW emp_details AS SELECT employee_id, department_id, TIMESTAMPDIFF(YEAR, birth_date, CURDATE()) AS age FROM employees; -- Ensure that employees table contains birth_date column --
-        
+
     -- Create a view in the classicmodels database that shows the sales performance of each employee.
         CREATE VIEW emp_sales_performance AS SELECT salesRepEmployeeNumber, SUM(amount) AS total_sales FROM customers JOIN payments USING (customerNumber) GROUP BY salesRepEmployeeNumber;
 
